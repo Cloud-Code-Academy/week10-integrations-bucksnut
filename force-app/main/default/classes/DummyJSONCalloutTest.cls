@@ -20,7 +20,7 @@ public with sharing class DummyJSONCalloutTest {
 			FROM Contact
 			WHERE DummyJSON_Id__c = '1'
 		];
-
+		System.debug('Contact Information :' + cont);
 		// Assert statements to ensure that the values in the created contact match what was in our mock response.
 		System.assertEquals('test@example.com', cont.Email, 'Email does not match your value: ' + cont.Email);
 		System.assertEquals('+123456789', cont.Phone, 'Phone does not match your value: ' + cont.Phone);
@@ -101,7 +101,7 @@ public with sharing class DummyJSONCalloutTest {
 		Map<String, Object> payloadMap = (Map<String, Object>) JSON.deserializeUntyped(payload);
 
 		// Assertions to check if the payload contains the right data
-		System.assertEquals(testContact.Id, payloadMap.get('salesforceId'), 'Id does not match.');
+		System.assertEquals(testContact.DummyJSON_Id__c, payloadMap.get('salesforceId'), 'Id does not match.');
 		System.assertEquals('John', payloadMap.get('firstName'), 'FirstName does not match.');
 		System.assertEquals('Doe', payloadMap.get('lastName'), 'LastName does not match.');
 		System.assertEquals('john.doe@example.com', payloadMap.get('email'), 'Email does not match.');
@@ -137,6 +137,7 @@ public with sharing class DummyJSONCalloutTest {
 		// As this is a future method, we need to enclose it in Test.startTest() and Test.stopTest() to ensure it's executed in the test context.
 		Test.startTest();
 		insert cont;
+		System.debug('The Contact information is:' + cont);
 		Test.stopTest();
 
 		// After the stopTest, the future method will have run. Now we can check if the contact was created correctly.
@@ -145,6 +146,7 @@ public with sharing class DummyJSONCalloutTest {
 			FROM Contact
 			WHERE Id = :cont.Id
 		];
+		System.debug('The Contact email is :' + cont.Email);
 		System.assertEquals(cont.Email, 'test@example.com', 'Email does not match your value: ' + cont.Email);
 		System.assertEquals(cont.Phone, '+123456789', 'Phone does not match your value: ' + cont.Phone);
 		System.assertEquals(
